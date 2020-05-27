@@ -1,28 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
+using Domain.Model.Entities;
+using Domain.Model.Exceptions;
+using Domain.Model.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Presentation.Mvc.Controllers
 {
     public class GroupController : Controller
     {
-        // GET: Group
-        public ActionResult Index()
+        private readonly IGroupService _groupService;
+
+        public GroupController(IGroupService groupService)
         {
-            return View();
+            _groupService = groupService;
+        }
+        // GET: Group
+        public async Task<IActionResult> Index()
+        {
+            var groups = await _groupService.GetAllAsync();
+            if (groups == null)
+                return Redirect("/");
+            return View(groups);
         }
 
         // GET: Group/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var groupEntity = await _groupService.GetByIdAsync(id.Value);
+            if (groupEntity == null)
+            {
+                return NotFound();
+            }
+            return View(groupEntity);
         }
 
         // GET: Group/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -30,64 +48,102 @@ namespace Presentation.Mvc.Controllers
         // POST: Group/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create([Bind("Id,Name,Genrer,Formed,City,Nation")] GroupEntity groupEntity)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
+                try
+                {
+                    // TODO: Add insert logic here
 
-                return RedirectToAction(nameof(Index));
+                    await _groupService.InsertAsync(groupEntity);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (EntityValidationException e)
+                {
+                    ModelState.AddModelError(e.PropertyName, e.Message);
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View(groupEntity);
         }
 
         // GET: Group/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var groupEntity = await _groupService.GetByIdAsync(id.Value);
+            if (groupEntity == null)
+            {
+                return NotFound();
+            }
+            return View(groupEntity);
         }
 
         // POST: Group/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Genrer,Formed,City,Nation")] GroupEntity groupEntity)
         {
-            try
+            if (id != groupEntity.Id)
             {
-                // TODO: Add update logic here
+                return NotFound();
+            }
 
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _groupService.UpdateAsync(groupEntity);
+                }
+                catch (EntityValidationException e)
+                {
+                    ModelState.AddModelError(e.PropertyName, e.Message);
+                    return View(groupEntity);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (await _groupService.GetByIdAsync(id) == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(groupEntity);
         }
 
         // GET: Group/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var groupEntity = await _groupService.GetByIdAsync(id.Value);
+            if (groupEntity == null)
+            {
+                return NotFound();
+            }
+
+            return View(groupEntity);
         }
 
         // POST: Group/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            await _groupService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
