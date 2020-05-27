@@ -1,7 +1,7 @@
 ﻿using Domain.Model.Entities;
+using Domain.Model.Exceptions;
 using Domain.Model.Interfaces.Repositories;
 using Domain.Model.Interfaces.Services;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,34 +16,44 @@ namespace Domain.Service.Services
         {
             _groupRepository = groupRepository;
         }
-        public Task<bool> CheckNameAsync(string name, int id)
+        public async Task<bool> CheckNameAsync(string name, int id)
         {
-            throw new NotImplementedException();
+            return await _groupRepository.CheckNameAsync(name, id);
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            await _groupRepository.DeleteAsync(id);
         }
 
-        public Task<IEnumerable<GroupEntity>> GetAllAsync()
+        public async Task<IEnumerable<GroupEntity>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _groupRepository.GetAllAsync();
         }
 
-        public Task<GroupEntity> GetByIdAsync(int id)
+        public async Task<GroupEntity> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _groupRepository.GetByIdAsync(id);
         }
 
-        public Task InsertAsync(GroupEntity insertedEntity)
+        public async Task InsertAsync(GroupEntity insertedEntity)
         {
-            throw new NotImplementedException();
+            var nameExists = await _groupRepository.CheckNameAsync(insertedEntity.Name);
+            if (nameExists)
+            {
+                throw new EntityValidationException(nameof(GroupEntity.Name), $"Name: {insertedEntity.Name } já existe!");
+            }
+            await _groupRepository.InsertAsync(insertedEntity);
         }
 
-        public Task UpdateAsync(GroupEntity updatedEntity)
+        public async Task UpdateAsync(GroupEntity updatedEntity)
         {
-            throw new NotImplementedException();
+            var nameExists = await _groupRepository.CheckNameAsync(updatedEntity.Name, updatedEntity.Id);
+            if (nameExists)
+            {
+                throw new EntityValidationException(nameof(GroupEntity.Name), $"Name: {updatedEntity.Name} já existe!");
+            }
+            await _groupRepository.UpdateAsync(updatedEntity);
         }
     }
 }

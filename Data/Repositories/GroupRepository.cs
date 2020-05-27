@@ -1,6 +1,8 @@
-﻿using Domain.Model.Entities;
+﻿using Data.Context;
+using Domain.Model.Entities;
+using Domain.Model.Exceptions;
 using Domain.Model.Interfaces.Repositories;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,39 +10,65 @@ namespace Data.Repositories
 {
     public class GroupRepository : IGroupRepository
     {
-        public Task<bool> CheckNameAsync(string name, int id = -1)
+        private readonly LibraryContext _libraryContext;
+
+        public GroupRepository(
+            LibraryContext libraryContext)
         {
-            throw new NotImplementedException();
+            _libraryContext = libraryContext;
+        }
+        public async Task<bool> CheckNameAsync(string name, int id = 0)
+        {
+            var nameExists = await _libraryContext.Groups.AnyAsync(x => x.Name == name && x.Id != id);
+            return nameExists;
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var groupEntity = await _libraryContext.Groups.FindAsync(id);
+            _libraryContext.Groups.Remove(groupEntity);
+            await _libraryContext.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<GroupEntity>> GetAllAsync()
+        public async Task<IEnumerable<GroupEntity>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _libraryContext.Groups.ToListAsync();
         }
 
-        public Task<GroupEntity> GetByIdAsync(int id)
+        public async Task<GroupEntity> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _libraryContext.Groups.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task<GroupEntity> GetByNameAsync(string name)
+        public async Task<GroupEntity> GetByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            return await _libraryContext.Groups.SingleOrDefaultAsync(x => x.Name == name);
         }
 
-        public Task InsertAsync(GroupEntity insertedEntity)
+        public async Task InsertAsync(GroupEntity insertedEntity)
         {
-            throw new NotImplementedException();
+            _libraryContext.Add(insertedEntity);
+            await _libraryContext.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(GroupEntity updatedEntity)
+        public async Task UpdateAsync(GroupEntity updatedEntity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _libraryContext.Update(updatedEntity);
+                await _libraryContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (await GetByIdAsync(updatedEntity.Id) == null)
+                {
+                    throw new RepositoryException("Group not found");
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
     }
 }
