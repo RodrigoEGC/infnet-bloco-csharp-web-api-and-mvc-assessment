@@ -8,13 +8,12 @@ namespace Domain.Model.Entities
     {
         public int Id { get; set; }
 
-        [Display(Name = "The Band")]
         [StringLength(20, MinimumLength = 3)]
         [Required(ErrorMessage = "Este campo é obrigatorio")]
-        [Remote(
-            action: "CheckName",
-            controller: "Group",
-            AdditionalFields = nameof(Id))]
+        //[Remote(
+        //    action: "CheckName",
+        //    controller: "Group",
+        //    AdditionalFields = nameof(Id))]
 
         public string Name { get; set; }
 

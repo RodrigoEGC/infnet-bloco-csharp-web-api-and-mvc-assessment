@@ -18,7 +18,7 @@ namespace Crosscutting.Identity
             IConfiguration configuration)
         {
             AddDbContext(serviceCollection, configuration);
-            serviceCollection.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            serviceCollection.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<LoginContext>();
         }
         public static void RegisterIdentityForWebApi(
@@ -27,7 +27,7 @@ namespace Crosscutting.Identity
         {
             AddDbContext(services, configuration);
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<LoginContext>();
         }
     }

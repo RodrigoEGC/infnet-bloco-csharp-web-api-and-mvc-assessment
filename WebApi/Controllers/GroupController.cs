@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 using Domain.Model.Entities;
 using Domain.Model.Exceptions;
 using Domain.Model.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class GroupController : ControllerBase
     {
         private readonly IGroupService _groupService;
@@ -109,5 +111,12 @@ namespace WebApi.Controllers
 
             return groupEntity;
         }
+        //[HttpGet("CheckName/{name}/{id}")]
+        //public async Task<ActionResult<bool>> CheckIsbnAsync(string name, int id)
+        //{
+        //    var isNameValid = await _groupService.CheckNameAsync(name, id);
+
+        //    return isNameValid;
+        //}
     }
 }

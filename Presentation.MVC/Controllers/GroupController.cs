@@ -2,11 +2,13 @@
 using Domain.Model.Entities;
 using Domain.Model.Exceptions;
 using Domain.Model.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Presentation.Mvc.Controllers
 {
+    [Authorize]
     public class GroupController : Controller
     {
         private readonly IGroupService _groupService;
@@ -48,7 +50,7 @@ namespace Presentation.Mvc.Controllers
         // POST: Group/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Genrer,Formed,City,Nation")] GroupEntity groupEntity)
+        public async Task<IActionResult> Create([Bind("Id,Name,Genre,Formed,City,Nation")] GroupEntity groupEntity)
         {
             if (ModelState.IsValid)
             {
@@ -145,5 +147,16 @@ namespace Presentation.Mvc.Controllers
             await _groupService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+        //[AcceptVerbs("GET", "POST")]
+        //public async Task<IActionResult> CheckName(string name, int id)
+        //{
+        //    if (await _groupService.CheckNameAsync(name, id))
+        //    {
+        //        return Json($"Group Name: {name} já existe!");
+        //    }
+
+        //    return Json(true);
+        //}
     }
 }

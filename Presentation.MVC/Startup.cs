@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Presentation.Mvc.Extensions;
 
 namespace Presentation.MVC
 {
@@ -21,8 +22,15 @@ namespace Presentation.MVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
             services.AddRazorPages();
+
+            services.RegisterOptionsConfiguration(Configuration);
+
+            services.RegisterHttpClients(Configuration);
+
             services.RegisterDataAccess(Configuration);
+
             services.RegisterIdentityForMvc(Configuration);
         }
 

@@ -2,7 +2,9 @@
 using Domain.Model.Entities;
 using Domain.Model.Exceptions;
 using Domain.Model.Interfaces.Repositories;
+using Domain.Model.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,17 +13,20 @@ namespace Data.Repositories
     public class GroupRepository : IGroupRepository
     {
         private readonly LibraryContext _libraryContext;
+        private readonly IOptionsMonitor<TestOption> _testOption;
 
         public GroupRepository(
-            LibraryContext libraryContext)
+            LibraryContext libraryContext,
+            IOptionsMonitor<TestOption> testOption)
         {
             _libraryContext = libraryContext;
+            _testOption = testOption;
         }
-        public async Task<bool> CheckNameAsync(string name, int id = 0)
-        {
-            var nameExists = await _libraryContext.Groups.AnyAsync(x => x.Name == name && x.Id != id);
-            return nameExists;
-        }
+        //public async Task<bool> CheckNameAsync(string name, int id)
+        //{
+        //    var nameExists = await _libraryContext.Groups.AnyAsync(x => x.Name == name && x.Id != id);
+        //    return nameExists;
+        //}
 
         public async Task DeleteAsync(int id)
         {
@@ -40,10 +45,10 @@ namespace Data.Repositories
             return await _libraryContext.Groups.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<GroupEntity> GetByNameAsync(string name)
-        {
-            return await _libraryContext.Groups.SingleOrDefaultAsync(x => x.Name == name);
-        }
+        //public async Task<GroupEntity> GetByNameAsync(string name)
+        //{
+        //    return await _libraryContext.Groups.SingleOrDefaultAsync(x => x.Name == name);
+        //}
 
         public async Task InsertAsync(GroupEntity insertedEntity)
         {
