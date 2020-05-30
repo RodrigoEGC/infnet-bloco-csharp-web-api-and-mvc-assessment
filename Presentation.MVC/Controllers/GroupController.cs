@@ -88,7 +88,7 @@ namespace Presentation.Mvc.Controllers
         // POST: Group/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Genrer,Formed,City,Nation")] GroupEntity groupEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Genre,Formed,City,Nation")] GroupEntity groupEntity)
         {
             if (id != groupEntity.Id)
             {
