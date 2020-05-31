@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20200530172312_RemoveDisplayName")]
-    partial class RemoveDisplayName
+    [Migration("20200531032138_InsertRemoteValidation")]
+    partial class InsertRemoteValidation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

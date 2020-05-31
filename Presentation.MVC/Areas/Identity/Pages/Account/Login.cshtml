@@ -7,7 +7,8 @@
 
 <h1>@ViewData["Title"]</h1>
 
-   
+<hr />
+
 <body class="bg-gradient-primary">
     <div class="row">
 
@@ -26,7 +27,7 @@
                                 <div class="col-lg-6">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4">Welcome to APP Music Library!</h1>
+                                            <h1 class="h4 text-gray-900 mb-4">Welcome to ALL MusicX!</h1>
                                         </div>
                                         <form id="account" method="post" class="user">
                                             <div class="form-group">
@@ -67,11 +68,14 @@
         </div>
         <div class="col-md-6 col-md-offset-2">
             <section>
+                <h4>Use another service to login.</h4>
                 <hr />
                 @{
                     if ((Model.ExternalLogins?.Count ?? 0) == 0)
                     {
                         <div>
+                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                            for details on setting up this ASP.NET application to support logging in via external services.
                         </div>
                     }
                     else

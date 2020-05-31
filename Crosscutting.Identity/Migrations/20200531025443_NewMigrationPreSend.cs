@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Crosscutting.Identity.Migrations
 {
-    public partial class InitialLoginContext : Migration
+    public partial class NewMigrationPreSend : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

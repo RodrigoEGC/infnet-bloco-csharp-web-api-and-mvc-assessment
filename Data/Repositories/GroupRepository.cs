@@ -22,11 +22,11 @@ namespace Data.Repositories
             _libraryContext = libraryContext;
             _testOption = testOption;
         }
-        //public async Task<bool> CheckNameAsync(string name, int id)
-        //{
-        //    var nameExists = await _libraryContext.Groups.AnyAsync(x => x.Name == name && x.Id != id);
-        //    return nameExists;
-        //}
+        public async Task<bool> CheckNameAsync(string name, int id)
+        {
+            var nameExists = await _libraryContext.Groups.AnyAsync(x => x.Name == name && x.Id != id);
+            return nameExists;
+        }
 
         public async Task DeleteAsync(int id)
         {
@@ -45,10 +45,10 @@ namespace Data.Repositories
             return await _libraryContext.Groups.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        //public async Task<GroupEntity> GetByNameAsync(string name)
-        //{
-        //    return await _libraryContext.Groups.SingleOrDefaultAsync(x => x.Name == name);
-        //}
+        public async Task<GroupEntity> GetByNameAsync(string name)
+        {
+            return await _libraryContext.Groups.SingleOrDefaultAsync(x => x.Name == name);
+        }
 
         public async Task InsertAsync(GroupEntity insertedEntity)
         {

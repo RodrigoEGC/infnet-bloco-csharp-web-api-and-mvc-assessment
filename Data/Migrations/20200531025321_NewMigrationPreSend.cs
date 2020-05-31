@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class InitalGroupEntity : Migration
+    public partial class NewMigrationPreSend : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

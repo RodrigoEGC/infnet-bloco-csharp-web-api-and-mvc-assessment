@@ -2,7 +2,7 @@
 
 namespace Data.Migrations
 {
-    public partial class RemoveDisplayName : Migration
+    public partial class InsertRemoteValidation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -143,26 +143,26 @@ namespace Presentation.Mvc.HttpServices
             }
         }
 
-        //public async Task<bool> CheckNameAsync(string name, int id)
-        //{
-        //    var jwtSuccess = await AddAuthJwtToRequest();
-        //    if (!jwtSuccess)
-        //    {
-        //        return false;
-        //    }
+        public async Task<bool> CheckNameAsync(string name, int id)
+        {
+            var jwtSuccess = await AddAuthJwtToRequest();
+            if (!jwtSuccess)
+            {
+                return false;
+            }
 
-        //    await AddAuthJwtToRequest();
-        //    var pathWithId = $"{_libraryHttpOptions.CurrentValue.GroupPath}/CheckName/{name}/{id}";
-        //    var httpResponseMessage = await _httpClient.GetAsync(pathWithId);
+            await AddAuthJwtToRequest();
+            var pathWithId = $"{_libraryHttpOptions.CurrentValue.GroupPath}/CheckName/{name}/{id}";
+            var httpResponseMessage = await _httpClient.GetAsync(pathWithId);
 
-        //    if (!httpResponseMessage.IsSuccessStatusCode)
-        //    {
-        //        await _signInManager.SignOutAsync();
-        //        return false;
-        //    }
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                await _signInManager.SignOutAsync();
+                return false;
+            }
 
-        //    return bool.Parse(await httpResponseMessage.Content.ReadAsStringAsync());
-        //}
+            return bool.Parse(await httpResponseMessage.Content.ReadAsStringAsync());
+        }
 
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20200527162040_InitalGroupEntity")]
-    partial class InitalGroupEntity
+    [Migration("20200531025321_NewMigrationPreSend")]
+    partial class NewMigrationPreSend
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

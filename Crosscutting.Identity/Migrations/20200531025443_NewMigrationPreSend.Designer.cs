@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Crosscutting.Identity.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    [Migration("20200527180551_InitialLoginContext")]
-    partial class InitialLoginContext
+    [Migration("20200531025443_NewMigrationPreSend")]
+    partial class NewMigrationPreSend
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
