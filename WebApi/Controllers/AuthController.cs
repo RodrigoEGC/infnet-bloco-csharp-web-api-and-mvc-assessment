@@ -57,7 +57,7 @@ namespace WebApi.Controllers
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey)),
                     SecurityAlgorithms.HmacSha256Signature),
-                Expires = DateTime.UtcNow.AddSeconds(_jwtSettings.ExpiryTimeInSeconds),
+                Expires = DateTime.UtcNow.AddDays(_jwtSettings.ExpiryDays),
                 Audience = _jwtSettings.Audience,
                 Issuer = _jwtSettings.Issuer
             };

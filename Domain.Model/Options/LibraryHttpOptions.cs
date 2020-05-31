@@ -7,6 +7,6 @@ namespace Domain.Model.Options
         public Uri ApiBaseUrl { get; set; }
         public string GroupPath { get; set; }
         public string Name { get; set; }
-        public int Timeout { get; set; }
+        public int DayOut { get; set; }
     }
 }

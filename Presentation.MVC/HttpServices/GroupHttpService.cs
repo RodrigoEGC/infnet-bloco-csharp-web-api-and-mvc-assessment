@@ -36,7 +36,7 @@ namespace Presentation.Mvc.HttpServices
             ;
 
             _httpClient = httpClientFactory.CreateClient(libraryHttpOptions.CurrentValue.Name);
-            _httpClient.Timeout = TimeSpan.FromMinutes(_libraryHttpOptions.CurrentValue.Timeout);
+            _httpClient.Timeout = TimeSpan.FromDays(_libraryHttpOptions.CurrentValue.DayOut);
         }
         private async Task<bool> AddAuthJwtToRequest()
         {

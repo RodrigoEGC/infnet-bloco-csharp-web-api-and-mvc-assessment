@@ -130,7 +130,7 @@ namespace Presentation.Mvc.Areas.Identity.Pages.Account
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.Strict,
-                MaxAge = TimeSpan.FromMinutes(1) //refatorar para pegar de configuração
+                MaxAge = TimeSpan.FromDays(1)
             };
 
             _httpContextAccessor.HttpContext.Response.Cookies.Delete("libraryToken");
