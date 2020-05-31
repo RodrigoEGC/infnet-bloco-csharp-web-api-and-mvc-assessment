@@ -8,10 +8,13 @@ Para este projeto da Faculdade foi proposto o tema Album e Banda, com relacionam
 * API REST
 * AUTHORIZE
 * AUTHENTICATION
+* CLAIM (Codigo aplicado, mas não está em utilização)
 
 ```bash
-    solution: set startup projects...
-    Select: Mvc and Web Api
+    1. solution: set startup projects...
+    2. Select: Mvc and Web Api
+    3. Email: allmusix@allmusix.com
+    4: Password: @Kbet759 
 
 ```
 
