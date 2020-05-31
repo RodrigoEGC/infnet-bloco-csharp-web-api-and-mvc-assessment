@@ -11,10 +11,12 @@ Este Projeto é pertinente à disciplina Desenvolvimento de Aplicações ASP.NET
 * CLAIM (Codigo aplicado, mas não está em utilização)
 
 ```bash
-    1. solution: set startup projects...
-    2. Select: Mvc and Web Api
-    3. Email: allmusix@allmusix.com
-    4: Password: @Kbet759 
+    1. Update-Database -context -LibraryContext
+    2. Update-Database -context -LoginContext
+    3. solution: set startup projects...
+    4. Select: Mvc and Web Api
+    5. Email: allmusix@allmusix.com
+    6: Password: @Kbet759 
 
 ```
 
