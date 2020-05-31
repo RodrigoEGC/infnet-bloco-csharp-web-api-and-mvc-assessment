@@ -22,7 +22,7 @@ namespace Presentation.Mvc.Controllers
         {
             var groups = await _groupService.GetAllAsync();
             if (groups == null)
-                return Redirect("/");
+                return Redirect("/Identity/Account/Login");
             return View(groups);
         }
 
