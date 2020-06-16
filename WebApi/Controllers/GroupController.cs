@@ -112,7 +112,7 @@ namespace WebApi.Controllers
             return groupEntity;
         }
         [HttpGet("CheckName/{name}/{id}")]
-        public async Task<ActionResult<bool>> CheckIsbnAsync(string name, int id)
+        public async Task<ActionResult<bool>> CheckNameAsync(string name, int id)
         {
             var isNameValid = await _groupService.CheckNameAsync(name, id);
 
