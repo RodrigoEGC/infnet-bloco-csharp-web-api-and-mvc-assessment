@@ -15,18 +15,20 @@ namespace InversionOfControl
             this IServiceCollection serviceCollection,
             IConfiguration configuration)
         {
-            serviceCollection.AddDbContext<LibraryContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("LibraryContext")));
+            serviceCollection.AddDbContext<LibraryMusicalContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("LibraryMusicalContext")));
 
             serviceCollection.AddScoped<IGroupService, GroupService>();
             serviceCollection.AddScoped<IGroupRepository, GroupRepository>();
+            serviceCollection.AddScoped<IAlbumService, AlbumService>();
+            serviceCollection.AddScoped<IAlbumRepository, AlbumRepository>();
         }
         public static void RegisterDataAccess(
             this IServiceCollection serviceCollection,
             IConfiguration configuration)
         {
-            serviceCollection.AddDbContext<LibraryContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("LibraryContext")));
+            serviceCollection.AddDbContext<LibraryMusicalContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("LibraryMusicalContext")));
 
             serviceCollection.AddScoped<IGroupRepository, GroupRepository>();
         }

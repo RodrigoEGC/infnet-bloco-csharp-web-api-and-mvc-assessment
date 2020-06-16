@@ -12,8 +12,8 @@ namespace Presentation.Mvc.Extensions
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            var libraryHttpOptionsSection = configuration.GetSection(nameof(LibraryHttpOptions));
-            var libraryHttpOptions = libraryHttpOptionsSection.Get<LibraryHttpOptions>();
+            var libraryHttpOptionsSection = configuration.GetSection(nameof(LibraryMusicalHttpOptions));
+            var libraryHttpOptions = libraryHttpOptionsSection.Get<LibraryMusicalHttpOptions>();
 
             services.AddHttpClient(libraryHttpOptions.Name, x => { x.BaseAddress = libraryHttpOptions.ApiBaseUrl; });
 

@@ -4,18 +4,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Context
 {
-    public class LibraryContext : DbContext
+    public class LibraryMusicalContext : DbContext
     {
-        public LibraryContext(DbContextOptions<LibraryContext> options)
+        public LibraryMusicalContext(DbContextOptions<LibraryMusicalContext> options)
             :base(options)
         {
 
         }
         public DbSet<GroupEntity> Groups { get; set; }
+        public DbSet<AlbumEntity> Albums { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new GroupConfiguration());
+            modelBuilder.ApplyConfiguration(new AlbumConfiguration());
+
             base.OnModelCreating(modelBuilder);
         }
     }

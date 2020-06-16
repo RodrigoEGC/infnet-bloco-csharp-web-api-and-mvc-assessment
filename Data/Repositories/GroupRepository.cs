@@ -12,11 +12,11 @@ namespace Data.Repositories
 {
     public class GroupRepository : IGroupRepository
     {
-        private readonly LibraryContext _libraryContext;
+        private readonly LibraryMusicalContext _libraryContext;
         private readonly IOptionsMonitor<TestOption> _testOption;
 
         public GroupRepository(
-            LibraryContext libraryContext,
+            LibraryMusicalContext libraryContext,
             IOptionsMonitor<TestOption> testOption)
         {
             _libraryContext = libraryContext;

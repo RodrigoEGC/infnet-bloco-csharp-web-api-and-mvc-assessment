@@ -13,7 +13,7 @@ namespace Presentation.Mvc.HttpServices
         private readonly HttpClient _httpClient;
         public AuthHttpService(
             IHttpClientFactory httpClientFactory,
-            IOptionsMonitor<LibraryHttpOptions> libraryHttpOptions)
+            IOptionsMonitor<LibraryMusicalHttpOptions> libraryHttpOptions)
         {
             _httpClient = httpClientFactory.CreateClient(libraryHttpOptions.CurrentValue.Name);
         }

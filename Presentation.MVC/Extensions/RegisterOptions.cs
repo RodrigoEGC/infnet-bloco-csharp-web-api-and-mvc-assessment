@@ -10,7 +10,7 @@ namespace Presentation.Mvc.Extensions
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.Configure<LibraryHttpOptions>(configuration.GetSection(nameof(LibraryHttpOptions)));
+            services.Configure<LibraryMusicalHttpOptions>(configuration.GetSection(nameof(LibraryMusicalHttpOptions)));
             services.AddOptions<TestOption>()
                 .Configure(option =>
                 {

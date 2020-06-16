@@ -20,12 +20,12 @@ namespace Presentation.Mvc.HttpServices
     {
         private readonly HttpClient _httpClient;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IOptionsMonitor<LibraryHttpOptions> _libraryHttpOptions;
+        private readonly IOptionsMonitor<LibraryMusicalHttpOptions> _libraryHttpOptions;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly SignInManager<IdentityUser> _signInManager;
         public GroupHttpService(
             IHttpClientFactory httpClientFactory,
-            IOptionsMonitor<LibraryHttpOptions> libraryHttpOptions,
+            IOptionsMonitor<LibraryMusicalHttpOptions> libraryHttpOptions,
             IHttpContextAccessor httpContextAccessor,
             SignInManager<IdentityUser> signInManager)
         {
