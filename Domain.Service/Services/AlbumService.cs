@@ -1,4 +1,5 @@
 ﻿using Domain.Model.Entities;
+using Domain.Model.Interfaces.Repositories;
 using Domain.Model.Interfaces.Services;
 using System;
 using System.Collections.Generic;
@@ -9,29 +10,35 @@ namespace Domain.Service.Services
 {
     public class AlbumService : IAlbumService
     {
-        public Task DeleteAsync(int id)
+        private readonly IAlbumRepository _albumRepository;
+
+        public AlbumService(IAlbumRepository albumRepository)
         {
-            throw new NotImplementedException();
+            _albumRepository = albumRepository;
+        } 
+        public async Task DeleteAsync(int id)
+        {
+            await _albumRepository.DeleteAsync(id);
         }
 
-        public Task<IEnumerable<AlbumEntity>> GetAllAsync()
+        public async Task<IEnumerable<AlbumEntity>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _albumRepository.GetAllAsync();
         }
 
-        public Task<AlbumEntity> GetByIdAsync(int id)
+        public async Task<AlbumEntity> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _albumRepository.GetByIdAsync(id);
         }
 
-        public Task InsertAsync(AlbumEntity insertedEntity)
+        public async Task InsertAsync(AlbumEntity insertedEntity)
         {
-            throw new NotImplementedException();
+            await _albumRepository.InsertAsync(insertedEntity);
         }
 
-        public Task UpdateAsync(AlbumEntity updatedEntity)
+        public async Task UpdateAsync(AlbumEntity updatedEntity)
         {
-            throw new NotImplementedException();
+            await _albumRepository.UpdateAsync(updatedEntity);
         }
     }
 }

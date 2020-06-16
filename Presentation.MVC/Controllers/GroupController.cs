@@ -148,15 +148,15 @@ namespace Presentation.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [AcceptVerbs("GET", "POST")]
-        public async Task<IActionResult> CheckName(string name, int id)
-        {
-            if (await _groupService.CheckNameAsync(name, id))
-            {
-                return Json($"Group Name: {name} já existe!");
-            }
+        //[AcceptVerbs("GET", "POST")]
+        //public async Task<IActionResult> CheckName(string name, int id)
+        //{
+        //    if (await _groupService.CheckNameAsync(name, id))
+        //    {
+        //        return Json($"Group Name: {name} já existe!");
+        //    }
 
-            return Json(true);
-        }
+        //    return Json(true);
+        //}
     }
 }

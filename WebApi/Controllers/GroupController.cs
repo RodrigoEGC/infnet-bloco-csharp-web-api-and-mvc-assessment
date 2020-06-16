@@ -22,10 +22,10 @@ namespace WebApi.Controllers
         }
         // GET: api/Group
         [HttpGet]
-        public async Task<IEnumerable<GroupEntity>> GetGroupEntity()
+        public async Task<ActionResult<IEnumerable<GroupEntity>>> GetGroupEntity()
         {
             var groups = await _groupService.GetAllAsync();
-            return groups.ToList();
+            return Ok(groups.ToList());
         }
 
         // GET: api/Group/5
@@ -50,19 +50,10 @@ namespace WebApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            try
-            {
-                await _groupService.InsertAsync(groupEntity);
 
-                return CreatedAtAction(
-                    "GetGroupEntity",
-                    new { id = groupEntity.Id }, groupEntity);
-            }
-            catch (EntityValidationException e)
-            {
-                ModelState.AddModelError(e.PropertyName, e.Message);
-                return BadRequest(ModelState);
-            }
+            await _groupService.InsertAsync(groupEntity);
+
+            return Ok(groupEntity);
         }
 
         // PUT: api/Group/5
@@ -77,11 +68,6 @@ namespace WebApi.Controllers
             try
             {
                 await _groupService.UpdateAsync(groupEntity);
-            }
-            catch (EntityValidationException e)
-            {
-                ModelState.AddModelError(e.PropertyName, e.Message);
-                return BadRequest(ModelState);
             }
             catch (RepositoryException e)
             {
@@ -109,14 +95,14 @@ namespace WebApi.Controllers
 
             await _groupService.DeleteAsync(id);
 
-            return groupEntity;
+            return Ok(groupEntity);
         }
-        [HttpGet("CheckName/{name}/{id}")]
-        public async Task<ActionResult<bool>> CheckNameAsync(string name, int id)
-        {
-            var isNameValid = await _groupService.CheckNameAsync(name, id);
+        //[HttpGet("CheckName/{name}/{id}")]
+        //public async Task<ActionResult<bool>> CheckNameAsync(string name, int id)
+        //{
+        //    var isNameValid = await _groupService.CheckNameAsync(name, id);
 
-            return isNameValid;
-        }
+        //    return isNameValid;
+        //}
     }
 }

@@ -1,7 +1,11 @@
-﻿using Domain.Model.Entities;
+﻿using Data.Context;
+using Domain.Model.Entities;
+using Domain.Model.Exceptions;
 using Domain.Model.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,29 +13,53 @@ namespace Data.Repositories
 {
     public class AlbumRepository : IAlbumRepository
     {
-        public Task DeleteAsync(int id)
+        private readonly LibraryMusicalContext _context;
+
+        public AlbumRepository(LibraryMusicalContext libraryMusicalContext)
         {
-            throw new NotImplementedException();
+            _context = libraryMusicalContext;
+        }
+        public async Task DeleteAsync(int id)
+        {
+            var albumModel = await _context.Albums.FindAsync(id);
+            _context.Albums.Remove(albumModel);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<AlbumEntity>> GetAllAsync()
+        public async Task<IEnumerable<AlbumEntity>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Albums.ToListAsync();
         }
 
-        public Task<AlbumEntity> GetByIdAsync(int id)
+        public async Task<AlbumEntity> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Albums.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task InsertAsync(AlbumEntity insertedEntity)
+        public async Task InsertAsync(AlbumEntity insertedEntity)
         {
-            throw new NotImplementedException();
+            _context.Add(insertedEntity);
+            await _context.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(AlbumEntity updatedEntity)
+        public async Task UpdateAsync(AlbumEntity updatedEntity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Update(updatedEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (await GetByIdAsync(updatedEntity.Id) == null)
+                {
+                    throw new RepositoryException("Album not found!");
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Domain.Model.Entities
 
         public bool Remasterizado { get; set; }
 
-        //public GroupEntity Group { get; set; }
+        public int GroupEntityId { get; set; }
+        public GroupEntity Group { get; set; }
     }
 }

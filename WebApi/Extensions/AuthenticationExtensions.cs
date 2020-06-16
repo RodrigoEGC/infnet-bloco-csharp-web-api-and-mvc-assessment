@@ -29,9 +29,9 @@ namespace WebApi.Extensions
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = jwtSettings.Issuer, //Web API, 
+                        ValidIssuer = jwtSettings.Issuer,
                         ValidateAudience = true,
-                        ValidAudience = jwtSettings.Audience, //MVC, 
+                        ValidAudience = jwtSettings.Audience, 
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
                         ValidateLifetime = true,
