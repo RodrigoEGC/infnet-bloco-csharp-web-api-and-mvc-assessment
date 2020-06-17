@@ -2,9 +2,7 @@
 using Domain.Model.Entities;
 using Domain.Model.Exceptions;
 using Domain.Model.Interfaces.Repositories;
-using Domain.Model.Options;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,13 +11,9 @@ namespace Data.Repositories
     public class GroupRepository : IGroupRepository
     {
         private readonly LibraryMusicalContext _libraryContext;
-        private readonly IOptionsMonitor<TestOption> _testOption;
-        public GroupRepository(
-            LibraryMusicalContext libraryContext,
-            IOptionsMonitor<TestOption> testOption)
+        public GroupRepository(LibraryMusicalContext libraryContext)
         {
             _libraryContext = libraryContext;
-            _testOption = testOption;
         }
         //public async Task<bool> CheckNameAsync(string name, int id)
         //{
