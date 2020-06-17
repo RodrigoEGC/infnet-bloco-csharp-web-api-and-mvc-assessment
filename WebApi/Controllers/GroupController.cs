@@ -97,12 +97,12 @@ namespace WebApi.Controllers
 
             return Ok(groupEntity);
         }
-        //[HttpGet("CheckName/{name}/{id}")]
-        //public async Task<ActionResult<bool>> CheckNameAsync(string name, int id)
-        //{
-        //    var isNameValid = await _groupService.CheckNameAsync(name, id);
+        [HttpGet("CheckName/{name}/{id}")]
+        public async Task<ActionResult<bool>> CheckNameAsync(string name, int id)
+        {
+            var isNameValid = await _groupService.CheckNameAsync(name, id);
 
-        //    return isNameValid;
-        //}
+            return Ok(isNameValid);
+        }
     }
 }
