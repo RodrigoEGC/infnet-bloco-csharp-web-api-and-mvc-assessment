@@ -23,4 +23,3 @@ Este Projeto é pertinente à disciplina Desenvolvimento de Aplicações ASP.NET
 ## [Screenshots]()
 
 * Em construção...(Faltando relacionamento one to many)
-<img src="./Untitled Diagram.png">
