@@ -2,7 +2,9 @@
 using Domain.Model.Entities;
 using Domain.Model.Exceptions;
 using Domain.Model.Interfaces.Repositories;
+using Domain.Model.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +16,14 @@ namespace Data.Repositories
     public class AlbumRepository : IAlbumRepository
     {
         private readonly LibraryMusicalContext _context;
+        private readonly IOptionsMonitor<TestOption> _testOption;
 
-        public AlbumRepository(LibraryMusicalContext libraryMusicalContext)
+        public AlbumRepository(
+            LibraryMusicalContext libraryMusicalContext,
+            IOptionsMonitor<TestOption> testOption)
         {
             _context = libraryMusicalContext;
+            _testOption = testOption;
         }
         public async Task DeleteAsync(int id)
         {

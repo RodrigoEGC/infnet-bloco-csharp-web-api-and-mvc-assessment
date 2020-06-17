@@ -16,21 +16,21 @@ namespace InversionOfControl
             IConfiguration configuration)
         {
             serviceCollection.AddDbContext<LibraryMusicalContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("LibraryMusicalContext")));
+                options.UseSqlServer(configuration.GetConnectionString("LibraryMusicalContext")));
 
-            serviceCollection.AddScoped<IGroupService, GroupService>();
-            serviceCollection.AddScoped<IGroupRepository, GroupRepository>();
             serviceCollection.AddScoped<IAlbumService, AlbumService>();
             serviceCollection.AddScoped<IAlbumRepository, AlbumRepository>();
+            serviceCollection.AddScoped<IGroupService, GroupService>();
+            serviceCollection.AddScoped<IGroupRepository, GroupRepository>();
         }
         public static void RegisterDataAccess(
             this IServiceCollection serviceCollection,
             IConfiguration configuration)
         {
             serviceCollection.AddDbContext<LibraryMusicalContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("LibraryMusicalContext")));
+                options.UseSqlServer(configuration.GetConnectionString("LibraryMusicalContext")));
 
-            serviceCollection.AddScoped<IGroupRepository, GroupRepository>();
+            serviceCollection.AddScoped<IAlbumRepository, AlbumRepository>();
         }
     }
 }

@@ -18,8 +18,8 @@ namespace Presentation.Mvc.Extensions
 
             services.AddHttpClient(libraryHttpOptions.Name, x => { x.BaseAddress = libraryHttpOptions.ApiBaseUrl; });
 
-            services.AddScoped<IGroupService, GroupHttpService>();
-            services.AddScoped<IAlbumService, AlbumService>();
+            services.AddScoped<IAlbumService, AlbumHttpService>();
+            services.AddScoped<IGroupHttpService, GroupHttpService>();
             services.AddScoped<IAuthHttpService, AuthHttpService>();
         }
     }

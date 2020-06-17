@@ -33,6 +33,7 @@ namespace Presentation.Mvc.HttpServices
             _libraryHttpOptions = libraryHttpOptions ?? throw new ArgumentNullException(nameof(libraryHttpOptions));
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
             _signInManager = signInManager;
+            ;
 
             _httpClient = httpClientFactory.CreateClient(libraryHttpOptions.CurrentValue.Name);
             _httpClient.Timeout = TimeSpan.FromDays(_libraryHttpOptions.CurrentValue.DayOut);

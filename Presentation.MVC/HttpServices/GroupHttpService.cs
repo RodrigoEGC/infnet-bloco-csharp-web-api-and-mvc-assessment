@@ -16,10 +16,9 @@ using System.Threading.Tasks;
 
 namespace Presentation.Mvc.HttpServices
 {
-    public class GroupHttpService : IGroupService
+    public class GroupHttpService : IGroupHttpService
     {
         private readonly HttpClient _httpClient;
-        private readonly IHttpClientFactory _httpClientFactory;
         private readonly IOptionsMonitor<LibraryMusicalHttpOptions> _libraryHttpOptions;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly SignInManager<IdentityUser> _signInManager;
@@ -29,12 +28,12 @@ namespace Presentation.Mvc.HttpServices
             IHttpContextAccessor httpContextAccessor,
             SignInManager<IdentityUser> signInManager)
         {
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _libraryHttpOptions = libraryHttpOptions ?? throw new ArgumentNullException(nameof(libraryHttpOptions));
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
             _signInManager = signInManager;
+            ;
 
-            _httpClient = httpClientFactory.CreateClient(libraryHttpOptions.CurrentValue.Name);
+            _httpClient = httpClientFactory.CreateClient(libraryHttpOptions.CurrentValue.Name) ?? throw new ArgumentNullException(nameof(httpClientFactory)); ;
             _httpClient.Timeout = TimeSpan.FromDays(_libraryHttpOptions.CurrentValue.DayOut);
         }
         private async Task<bool> AddAuthJwtToRequest()
@@ -84,6 +83,18 @@ namespace Presentation.Mvc.HttpServices
             }
 
             return JsonConvert.DeserializeObject<GroupEntity>(await httpResponseMessage.Content.ReadAsStringAsync());
+        }
+        public async Task<HttpResponseMessage> GetByIdHttpAsync(int id)
+        {
+            var jwtSuccess = await AddAuthJwtToRequest();
+            if (!jwtSuccess)
+            {
+                return null;
+            }
+            var pathWithId = $"{_libraryHttpOptions.CurrentValue.GroupPath}/{id}";
+            var httpResponseMessage = await _httpClient.GetAsync(pathWithId);
+
+            return httpResponseMessage;
         }
 
         public async Task InsertAsync(GroupEntity insertedEntity)
@@ -140,6 +151,7 @@ namespace Presentation.Mvc.HttpServices
                 await _signInManager.SignOutAsync();
             }
         }
+
 
         //public async Task<bool> CheckNameAsync(string name, int id)
         //{

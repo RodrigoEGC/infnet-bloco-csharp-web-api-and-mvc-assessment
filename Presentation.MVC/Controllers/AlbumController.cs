@@ -5,6 +5,7 @@ using Domain.Model.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Presentation.Mvc.HttpServices;
 using Presentation.Mvc.ViewModels;
 
 namespace Presentation.Mvc.Controllers
@@ -13,10 +14,10 @@ namespace Presentation.Mvc.Controllers
     public class AlbumController : Controller
     {
         private readonly IAlbumService _albumService;
-        private readonly IGroupService _groupService;
+        private readonly IGroupHttpService _groupService;
 
         public AlbumController(
-            IGroupService groupService,
+            IGroupHttpService groupService,
             IAlbumService albumService)
         {
             _albumService = albumService;

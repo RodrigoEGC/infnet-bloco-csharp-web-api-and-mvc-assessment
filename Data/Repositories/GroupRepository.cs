@@ -13,10 +13,13 @@ namespace Data.Repositories
     public class GroupRepository : IGroupRepository
     {
         private readonly LibraryMusicalContext _libraryContext;
-
-        public GroupRepository(LibraryMusicalContext libraryContext)
+        private readonly IOptionsMonitor<TestOption> _testOption;
+        public GroupRepository(
+            LibraryMusicalContext libraryContext,
+            IOptionsMonitor<TestOption> testOption)
         {
             _libraryContext = libraryContext;
+            _testOption = testOption;
         }
         //public async Task<bool> CheckNameAsync(string name, int id)
         //{
