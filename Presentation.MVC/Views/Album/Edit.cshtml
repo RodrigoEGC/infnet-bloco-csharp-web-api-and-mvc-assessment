@@ -1,4 +1,4 @@
-﻿@model Domain.Model.Entities.AlbumEntity
+﻿@model Presentation.Mvc.ViewModels.AlbumViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -37,6 +37,15 @@
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Remasterizado" /> @Html.DisplayNameFor(model => model.Remasterizado)
                 </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Group" class="control-label"></label>
+                <select asp-for="GroupEntityId"
+                        asp-items="Model.Groups"
+                        class="form-control">
+                    <option value="">Choice one Group</option>
+                </select>
+                <span asp-validation-for="Group" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

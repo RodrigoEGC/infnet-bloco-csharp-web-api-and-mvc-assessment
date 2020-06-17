@@ -1,26 +1,31 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using Domain.Model.Entities;
-using Domain.Model.Exceptions;
-using Domain.Model.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Presentation.Mvc.HttpServices;
 
 namespace Presentation.Mvc.Controllers
 {
     [Authorize]
     public class GroupController : Controller
     {
-        private readonly IGroupService _groupService;
+        private readonly IGroupHttpService _groupHttpService;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public GroupController(IGroupService groupService)
+        public GroupController(
+            IGroupHttpService groupHttpService,
+            SignInManager<IdentityUser> signInManager)
         {
-            _groupService = groupService;
+            _groupHttpService = groupHttpService;
+            _signInManager = signInManager;
         }
         // GET: Group
         public async Task<IActionResult> Index()
         {
-            var groups = await _groupService.GetAllAsync();
+            var groups = await _groupHttpService.GetAllAsync();
             if (groups == null)
                 return Redirect("/Identity/Account/Login");
             return View(groups);
@@ -33,12 +38,33 @@ namespace Presentation.Mvc.Controllers
             {
                 return NotFound();
             }
-            var groupEntity = await _groupService.GetByIdAsync(id.Value);
-            if (groupEntity == null)
+
+            var httpResponseMessage = await _groupHttpService.GetByIdHttpAsync(id.Value);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                if (httpResponseMessage.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    await _signInManager.SignOutAsync();
+                    return Redirect("/Identity/Account/Login");
+                }
+                else
+                {
+                    var message = await httpResponseMessage.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, message);
+
+                    var groups = await _groupHttpService.GetAllAsync();
+                    return View(nameof(Index), groups);
+                }
+            }
+
+            var groupModel = JsonConvert.DeserializeObject<GroupEntity>(await httpResponseMessage.Content.ReadAsStringAsync());
+            if (groupModel == null)
             {
                 return NotFound();
             }
-            return View(groupEntity);
+
+            return View(groupModel);
         }
 
         // GET: Group/Create
@@ -50,21 +76,12 @@ namespace Presentation.Mvc.Controllers
         // POST: Group/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Genre,Formed,City,Nation")] GroupEntity groupEntity)
+        public async Task<IActionResult> Create(GroupEntity groupEntity)
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    // TODO: Add insert logic here
-
-                    await _groupService.InsertAsync(groupEntity);
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (EntityValidationException e)
-                {
-                    ModelState.AddModelError(e.PropertyName, e.Message);
-                }
+                await _groupHttpService.InsertAsync(groupEntity);
+                return RedirectToAction(nameof(Index));
             }
             return View(groupEntity);
         }
@@ -77,7 +94,7 @@ namespace Presentation.Mvc.Controllers
                 return NotFound();
             }
 
-            var groupEntity = await _groupService.GetByIdAsync(id.Value);
+            var groupEntity = await _groupHttpService.GetByIdAsync(id.Value);
             if (groupEntity == null)
             {
                 return NotFound();
@@ -88,7 +105,7 @@ namespace Presentation.Mvc.Controllers
         // POST: Group/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Genre,Formed,City,Nation")] GroupEntity groupEntity)
+        public async Task<IActionResult> Edit(int id, GroupEntity groupEntity)
         {
             if (id != groupEntity.Id)
             {
@@ -97,26 +114,8 @@ namespace Presentation.Mvc.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _groupService.UpdateAsync(groupEntity);
-                }
-                catch (EntityValidationException e)
-                {
-                    ModelState.AddModelError(e.PropertyName, e.Message);
-                    return View(groupEntity);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (await _groupService.GetByIdAsync(id) == null)
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _groupHttpService.UpdateAsync(groupEntity);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(groupEntity);
@@ -130,7 +129,7 @@ namespace Presentation.Mvc.Controllers
                 return NotFound();
             }
 
-            var groupEntity = await _groupService.GetByIdAsync(id.Value);
+            var groupEntity = await _groupHttpService.GetByIdAsync(id.Value);
             if (groupEntity == null)
             {
                 return NotFound();
@@ -144,14 +143,14 @@ namespace Presentation.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _groupService.DeleteAsync(id);
+            await _groupHttpService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
         //[AcceptVerbs("GET", "POST")]
         //public async Task<IActionResult> CheckName(string name, int id)
         //{
-        //    if (await _groupService.CheckNameAsync(name, id))
+        //    if (await _groupHttpService.CheckNameAsync(name, id))
         //    {
         //        return Json($"Group Name: {name} já existe!");
         //    }

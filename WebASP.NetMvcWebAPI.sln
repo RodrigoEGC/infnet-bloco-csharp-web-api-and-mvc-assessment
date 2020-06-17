@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Service", "Domain.Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{0A14EC38-2191-4003-858A-D050E2FDC1CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosscutting.Identity", "Crosscutting.Identity\Crosscutting.Identity.csproj", "{5839A3E7-6B80-4B44-A9BC-2D063F417447}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crosscutting.Identity", "Crosscutting.Identity\Crosscutting.Identity.csproj", "{5839A3E7-6B80-4B44-A9BC-2D063F417447}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

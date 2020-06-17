@@ -1,93 +1,161 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
+using Domain.Model.Entities;
+using Domain.Model.Exceptions;
+using Domain.Model.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Presentation.Mvc.ViewModels;
 
 namespace Presentation.Mvc.Controllers
 {
+    [Authorize]
     public class AlbumController : Controller
     {
-        // GET: Album
-        public ActionResult Index()
+        private readonly IAlbumService _albumService;
+        private readonly IGroupService _groupService;
+
+        public AlbumController(
+            IGroupService groupService,
+            IAlbumService albumService)
         {
-            return View();
+            _albumService = albumService;
+            _groupService = groupService;
+        }
+        // GET: Album
+        public async Task<IActionResult> Index()
+        {
+            var albuns = await _albumService.GetAllAsync();
+
+            if (albuns == null)
+                return Redirect("/Identity/Account/Login");
+            return View(albuns);
         }
 
         // GET: Album/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int? id)
         {
-            return View();
+            if(id == null)
+            {
+                return NotFound();
+            }
+            var albumModel = await _albumService.GetByIdAsync(id.Value);
+            if(albumModel == null)
+            {
+                return NotFound();
+            }
+            return View(albumModel);
         }
 
         // GET: Album/Create
-        public ActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var albumModel = new AlbumViewModel(await _groupService.GetAllAsync());
+
+            return View(albumModel);
         }
 
         // POST: Album/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(AlbumEntity albumEntity)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _albumService.InsertAsync(albumEntity);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (EntityValidationException e)
+                {
+                    ModelState.AddModelError(e.PropertyName, e.Message);
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View(new AlbumViewModel(albumEntity));
         }
 
         // GET: Album/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var albumModel = await _albumService.GetByIdAsync(id.Value);
+            if (albumModel == null)
+            {
+                return NotFound();
+            }
+
+            var albumViewModel = new AlbumViewModel(albumModel, await _groupService.GetAllAsync());
+
+            return View(albumViewModel);
         }
 
         // POST: Album/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, AlbumEntity albumEntity)
         {
-            try
-            {
-                // TODO: Add update logic here
 
+            if (id != albumEntity.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _albumService.UpdateAsync(albumEntity);
+                }
+                catch (EntityValidationException e)
+                {
+                    ModelState.AddModelError(e.PropertyName, e.Message);
+                    return View(new AlbumViewModel(albumEntity));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (await _albumService.GetByIdAsync(id) == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(new AlbumViewModel(albumEntity));
         }
 
         // GET: Album/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var albumModel = await _albumService.GetByIdAsync(id.Value);
+            if (albumModel == null)
+            {
+                return NotFound();
+            }
+
+            return View(albumModel);
         }
 
         // POST: Album/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            await _albumService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Domain.Model.Interfaces.Services;
 using Domain.Model.Options;
+using Domain.Service.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Presentation.Mvc.HttpServices;
@@ -18,6 +19,7 @@ namespace Presentation.Mvc.Extensions
             services.AddHttpClient(libraryHttpOptions.Name, x => { x.BaseAddress = libraryHttpOptions.ApiBaseUrl; });
 
             services.AddScoped<IGroupService, GroupHttpService>();
+            services.AddScoped<IAlbumService, AlbumService>();
             services.AddScoped<IAuthHttpService, AuthHttpService>();
         }
     }
